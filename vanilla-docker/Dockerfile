@@ -1,25 +1,35 @@
-FROM ubuntu:14.04.4
+FROM ubuntu:14.04.4 AS builder
 
 MAINTAINER Christian Oelsner <c.oelsner@web.de>
 
+WORKDIR /opt
+
 RUN apt-get update && apt-get install -y unzip 
 
-ENV VERSION=1351 ZIP=terraria-server.zip CONFIG=Linux/serverconfig.txt
-
-WORKDIR /opt/terraria
+ARG VERSION=1353
 
 # uncomment for local debugging
-# ADD ./terraria-server-${VERSION}.zip ${ZIP}
+# ADD ./terraria-server-${VERSION}.zip terraria-server.zip
+ADD http://terraria.org/server/terraria-server-${VERSION}.zip terraria-server.zip
 
-ADD http://terraria.org/server/terraria-server-${VERSION}.zip ${ZIP}
+RUN unzip terraria-server.zip "${VERSION}/Linux/*" \
+  && chmod -R a+rw ${VERSION}/Linux/* \
+  && chmod a+x ${VERSION}/Linux/TerrariaServer* \
+  && mv ${VERSION}/Linux terraria/
 
-RUN unzip $ZIP 'Linux/*' && rm $ZIP \
-  && chmod -R a+rw ./Linux/* \
-  && chmod a+x ./Linux/TerrariaServer*
+# Stage 2
+FROM ubuntu:14.04.4
+
+WORKDIR /opt/terraria
 
 VOLUME ["/world"]
 EXPOSE 7777
 
-ADD serverconfig.txt ./Linux/
+COPY --from=builder /opt/terraria .
 
-ENTRYPOINT ./Linux/TerrariaServer -x64 -config $CONFIG
+VOLUME ["/world"]
+EXPOSE 7777
+
+ADD serverconfig.txt .
+
+ENTRYPOINT ./TerrariaServer -x64 -config serverconfig.txt
