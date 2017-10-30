@@ -22,9 +22,6 @@ FROM ubuntu:14.04.4
 
 WORKDIR /opt/terraria
 
-VOLUME ["/world"]
-EXPOSE 7777
-
 COPY --from=builder /opt/terraria .
 
 VOLUME ["/world"]
