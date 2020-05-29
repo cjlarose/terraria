@@ -20,7 +20,6 @@ WORKDIR /opt/terraria
 
 COPY --from=builder /opt/terraria .
 
-VOLUME ["/world"]
 EXPOSE 7777
 
 CMD ./TerrariaServer -x64 -config serverconfig.txt
