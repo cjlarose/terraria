@@ -25,4 +25,4 @@ EXPOSE 7777
 
 ADD serverconfig.txt .
 
-ENTRYPOINT ./TerrariaServer -x64 -config serverconfig.txt
+CMD ./TerrariaServer -x64 -config serverconfig.txt
