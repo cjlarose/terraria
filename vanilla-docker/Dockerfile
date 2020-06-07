@@ -6,12 +6,12 @@ WORKDIR /opt
 
 RUN apt-get update && apt-get install -y unzip 
 
-ADD https://terraria.org/system/dedicated_servers/archives/000/000/038/original/terraria-server-1404.zip terraria-server.zip
+ADD https://terraria.org/system/dedicated_servers/archives/000/000/039/original/terraria-server-1405.zip terraria-server.zip
 
-RUN unzip terraria-server.zip "1404/Linux/*" \
-  && chmod -R a+rw 1404/Linux/* \
-  && chmod a+x 1404/Linux/TerrariaServer* \
-  && mv 1404/Linux terraria/
+RUN unzip terraria-server.zip "1405/Linux/*" \
+  && chmod -R a+rw 1405/Linux/* \
+  && chmod a+x 1405/Linux/TerrariaServer* \
+  && mv 1405/Linux terraria/
 
 # Stage 2
 FROM ubuntu:14.04.4
